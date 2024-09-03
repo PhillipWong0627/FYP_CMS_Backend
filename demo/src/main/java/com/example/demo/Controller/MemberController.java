@@ -21,6 +21,7 @@ public class MemberController {
     }
 
 
+
     //Get All Member List
     @GetMapping("/getMember")
     public Result<List<Member>> getMember() {
