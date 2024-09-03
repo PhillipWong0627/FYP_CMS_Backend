@@ -20,8 +20,6 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-
-
     //Get All Member List
     @GetMapping("/getMember")
     public Result<List<Member>> getMember() {
