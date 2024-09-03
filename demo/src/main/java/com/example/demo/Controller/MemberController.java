@@ -21,6 +21,8 @@ public class MemberController {
         this.memberService = memberService;
     }
 
+
+    //Get All Member List
     @GetMapping("/getMember")
     public Result<List<Member>> getMember() {
         try {
@@ -42,10 +44,20 @@ public class MemberController {
 ////        }
     }
 
-    @PostMapping("/members")  // Change the path to avoid conflicts with the GET method
-    public void registerNewMember(@RequestBody Member member){
-        memberService.addNewMember(member);
+//    @PostMapping("/members")  // Change the path to avoid conflicts with the GET method
+//    public void registerNewMember(@RequestBody Member member){
+//        memberService.addNewMember(member);
+//    }
+    @PostMapping("/members")
+    public ResponseEntity<Result<Boolean>> registerNewMember(@RequestBody Member member){
+        Result<Boolean> result = memberService.addNewMember(member);
+        if (result.getCode() == CodeMsg.SUCCESS.getCode()) {
+            return ResponseEntity.ok(result); // Return 200 OK for success
+        } else {
+            return ResponseEntity.status(400).body(result); // Return 400 Bad Request for errors
+        }
     }
+
 
 
 }

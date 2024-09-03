@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.Bean.Member;
 import com.example.demo.repo.MemberRepository;
+import com.example.demo.result.CodeMsg;
+import com.example.demo.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,17 +32,22 @@ public class MemberService {
 //        }
 //        memberRepository.save(member);
 //    }
-    public void addNewMember(Member member) {
+    public Result<Boolean> addNewMember(Member member) {
         // Check if the member with the same name already exists
         Optional<Member> memberOptional = memberRepository
                 .findByMemberName(member.getMemberName());
+        Optional<Member> memberOptional1 = memberRepository.findByEmail(member.getEmail());
 
-        if (memberOptional.isPresent()) {
-            throw new IllegalStateException("Name Taken");
+        if (memberOptional1.isPresent()) {
+            return Result.error(CodeMsg.EMAIL_EXIST);
+//            throw new IllegalStateException("Name Taken");
         }
 
         // Save the new member to the database
         memberRepository.save(member);
+        // Return a success message
+        return Result.success(true);
+
     }
 
 }
