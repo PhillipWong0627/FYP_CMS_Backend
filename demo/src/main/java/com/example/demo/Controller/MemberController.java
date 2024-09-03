@@ -5,7 +5,6 @@ import com.example.demo.result.CodeMsg;
 import com.example.demo.result.Result;
 import com.example.demo.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +47,7 @@ public class MemberController {
 //    public void registerNewMember(@RequestBody Member member){
 //        memberService.addNewMember(member);
 //    }
-    @PostMapping("/members")
+    @PostMapping("/addMembers")
     public ResponseEntity<Result<Boolean>> registerNewMember(@RequestBody Member member){
         Result<Boolean> result = memberService.addNewMember(member);
         if (result.getCode() == CodeMsg.SUCCESS.getCode()) {
