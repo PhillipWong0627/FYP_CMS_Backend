@@ -33,9 +33,7 @@ public class MemberService {
 //        memberRepository.save(member);
 //    }
     public Result<Boolean> addNewMember(Member member) {
-        // Check if the member with the same name already exists
-        Optional<Member> memberOptional = memberRepository
-                .findByMemberName(member.getMemberName());
+
         Optional<Member> memberOptional1 = memberRepository.findByEmail(member.getEmail());
 
         if (memberOptional1.isPresent()) {
@@ -49,8 +47,24 @@ public class MemberService {
         return Result.success(true);
 
     }
+    public Result<Boolean> login(String email, String password) {
+        Optional<Member> memberOptional = memberRepository.findByEmail(email);
+
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+
+            // Directly compare the stored password with the entered password
+            if (member.getPassword().equals(password)) {
+                return Result.success(true);  // Login successful
+            } else {
+                return Result.error(CodeMsg.PASSWORD_ERROR);
+            }
+        }
+
+        return Result.error(CodeMsg.EMAIL_NOT_EXIST);
+    }
+
 
 }
 
-//Bean = CREATE TABLE
 

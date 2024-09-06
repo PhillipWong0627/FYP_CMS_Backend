@@ -14,10 +14,11 @@ public class CodeMsg {
     public static CodeMsg SUCCESS = new CodeMsg(0,"success");
     public static CodeMsg SERVER_ERROR = new CodeMsg(500100,"server error");
 
-    public static CodeMsg USERNAME_EXIST = new CodeMsg(500215,"Username has already existed, please try another username");
     //User
-    public static CodeMsg EMAIL_EXIST = new CodeMsg(500215,"Email has already existed, please try another username");
+    public static CodeMsg PASSWORD_ERROR = new CodeMsg(500213,"password is not correct, please try again!");
+    public static CodeMsg EMAIL_NOT_EXIST = new CodeMsg(500214,"Email is not exist");
 
+    public static CodeMsg EMAIL_EXIST = new CodeMsg(500215,"Email has already existed, please try another username");
 
     private CodeMsg(int code,String msg){
         this.code = code;

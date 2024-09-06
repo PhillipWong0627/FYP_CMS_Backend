@@ -55,6 +55,16 @@ public class MemberController {
             return ResponseEntity.status(400).body(result); // Return 400 Bad Request for errors
         }
     }
+    @PostMapping("/login")
+    public ResponseEntity<Result<Boolean>> login(@RequestBody Member loginRequest) {
+        Result<Boolean> result = memberService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        if (result.getCode() == 0) {
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.status(400).body(result);
+        }
+    }
+
 
 
 
