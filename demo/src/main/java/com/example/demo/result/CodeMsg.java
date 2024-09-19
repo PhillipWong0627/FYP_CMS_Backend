@@ -20,6 +20,9 @@ public class CodeMsg {
 
     public static CodeMsg EMAIL_EXIST = new CodeMsg(500215,"Email has already existed, please try another username");
 
+    //Facility
+    public static CodeMsg FACILITY_NOT_EXIST = new CodeMsg(500215,"Facility Not Existed");
+
     private CodeMsg(int code,String msg){
         this.code = code;
         this.msg = msg;

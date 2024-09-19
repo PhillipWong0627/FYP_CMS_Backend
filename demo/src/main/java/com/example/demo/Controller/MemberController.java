@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path="api/v1/user")
@@ -56,14 +57,43 @@ public class MemberController {
         }
     }
     @PostMapping("/login")
-    public ResponseEntity<Result<Boolean>> login(@RequestBody Member loginRequest) {
-        Result<Boolean> result = memberService.login(loginRequest.getEmail(), loginRequest.getPassword());
+    public ResponseEntity<Result<Map<String, Object>>> login(@RequestBody Member loginRequest) {
+        // Call the login method from the service layer
+        Result<Map<String, Object>> result = memberService.login(loginRequest.getEmail(), loginRequest.getPassword());
+
+        // If the login is successful, return the result with HTTP 200 OK status
+        if (result.getCode() == 0) {
+            return ResponseEntity.ok(result);
+        } else {
+            // If login fails, return the error result with HTTP 400 Bad Request status
+            return ResponseEntity.status(400).body(result);
+        }
+    }
+
+    // Endpoint to get member points
+    @GetMapping("/{memberId}/points")
+    public ResponseEntity<Result<Integer>> getMemberPoints(@PathVariable Long memberId) {
+        Result<Integer> result = memberService.getMemberPoints(memberId);
         if (result.getCode() == 0) {
             return ResponseEntity.ok(result);
         } else {
             return ResponseEntity.status(400).body(result);
         }
     }
+
+    // Endpoint to add points to a member after payment
+    @PostMapping("/{memberId}/add-points")
+    public ResponseEntity<Result<Boolean>> addPointsToMember(@PathVariable Long memberId, @RequestBody Map<String, Integer> request) {
+        int points = request.get("points");
+        Result<Boolean> result = memberService.addPoints(memberId, points);
+        if (result.getCode() == 0) {
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.status(400).body(result);
+        }
+    }
+
+
 
 
 

@@ -7,7 +7,9 @@ import com.example.demo.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -47,7 +49,7 @@ public class MemberService {
         return Result.success(true);
 
     }
-    public Result<Boolean> login(String email, String password) {
+    public Result<Map<String, Object>> login(String email, String password) {
         Optional<Member> memberOptional = memberRepository.findByEmail(email);
 
         if (memberOptional.isPresent()) {
@@ -55,7 +57,14 @@ public class MemberService {
 
             // Directly compare the stored password with the entered password
             if (member.getPassword().equals(password)) {
-                return Result.success(true);  // Login successful
+                // Login successful, return member data
+                Map<String, Object> memberData = new HashMap<>();
+                memberData.put("memberID", member.getId());
+                memberData.put("memberName", member.getMemberName());
+                memberData.put("email", member.getEmail());
+                memberData.put("points", member.getPoints());   
+
+                return Result.success(memberData);  // Login successful
             } else {
                 return Result.error(CodeMsg.PASSWORD_ERROR);
             }
@@ -64,6 +73,32 @@ public class MemberService {
         return Result.error(CodeMsg.EMAIL_NOT_EXIST);
     }
 
+    // Method to make a payment and add points
+    public Result<Boolean> addPoints(Long memberId, int points){
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
+
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            member.setPoints(member.getPoints() + points);  // Add points
+
+            // Add points equivalent to the payment amount
+            memberRepository.save(member);
+
+            return Result.success(true);
+        }
+
+        return Result.error(CodeMsg.EMAIL_NOT_EXIST);
+
+    }
+    public Result<Integer> getMemberPoints(Long memberId) {
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
+
+        if (memberOptional.isPresent()) {
+            return Result.success(memberOptional.get().getPoints());
+        }
+
+        return Result.error(CodeMsg.EMAIL_NOT_EXIST);
+    }
 
 }
 

@@ -20,6 +20,7 @@ public class Member {
     private String contact;
     private String description;
     private boolean isDeleted;
+    private int points = 0;
 
     public Member() {
     }
@@ -57,6 +58,14 @@ public class Member {
                 ", description='" + description + '\'' +
                 ", isDeleted=" + isDeleted +
                 '}';
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     public String getEmail() {
@@ -121,5 +130,9 @@ public class Member {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void addPoints(int points){
+        this.points += points;
     }
 }
