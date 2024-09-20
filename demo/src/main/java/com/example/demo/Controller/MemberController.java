@@ -68,7 +68,8 @@ public class MemberController {
         return Result.error(CodeMsg.SERVER_ERROR);
     }
 
-    @PutMapping("updateById/{Id}")
+    @CrossOrigin(origins = "http://localhost:8081")
+    @PatchMapping("updateById/{Id}")
     public Result<Member> updateMemberById(@PathVariable() Long Id, @RequestBody Member member){
         try{
             Member updatedMember = memberService.updateMember(Id, member);
