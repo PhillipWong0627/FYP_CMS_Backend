@@ -49,6 +49,10 @@ public class MemberService {
         return Result.success(true);
 
     }
+    public Optional<Member> getMemberById(Long id){
+        return memberRepository.findById(id);
+    }
+
     public Result<Map<String, Object>> login(String email, String password) {
         Optional<Member> memberOptional = memberRepository.findByEmail(email);
 
@@ -100,6 +104,20 @@ public class MemberService {
         return Result.error(CodeMsg.EMAIL_NOT_EXIST);
     }
 
+
+    // Update an existing facility
+    public Member updateMember(Long id, Member updatedMember) {
+        return memberRepository.findById(id).map(member -> {
+            member.setMemberName(updatedMember.getMemberName());
+            member.setAddress(updatedMember.getAddress());
+            member.setContact(updatedMember.getContact());
+            member.setDescription(updatedMember.getDescription());
+            return memberRepository.save(member);
+        }).orElseThrow(() -> new RuntimeException("Member not found with id " + id));
+    }
+    public void deleteMember(Long id) {
+        memberRepository.deleteById(id);
+    }
 }
 
 

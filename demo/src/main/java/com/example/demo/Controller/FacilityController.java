@@ -54,12 +54,12 @@ public class FacilityController {
     }
 
     @PutMapping("updateById/{id}")
-    public ResponseEntity<Facility> updateFacility(@PathVariable Long id, @RequestBody Facility facility) {
+    public Result<Facility> updateFacility(@PathVariable Long id, @RequestBody Facility facility) {
         try {
             Facility updatedFacility = facilityService.updateFacility(id, facility);
-            return ResponseEntity.ok(updatedFacility);
+            return Result.success(updatedFacility);
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            return Result.error(CodeMsg.SERVER_ERROR);
         }
     }
 

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path="api/v1/user")
@@ -54,6 +55,26 @@ public class MemberController {
             return ResponseEntity.ok(result); // Return 200 OK for success
         } else {
             return ResponseEntity.status(400).body(result); // Return 400 Bad Request for errors
+        }
+    }
+
+    @GetMapping("/getById/{id}")
+    public Result<Optional<Member>> getMemberById(@PathVariable() Long id){
+        Optional<Member> getMemberById = memberService.getMemberById(id);
+
+        if(getMemberById.isPresent()){
+            return Result.success(getMemberById);
+        }
+        return Result.error(CodeMsg.SERVER_ERROR);
+    }
+
+    @PutMapping("updateById/{Id}")
+    public Result<Member> updateMemberById(@PathVariable() Long Id, @RequestBody Member member){
+        try{
+            Member updatedMember = memberService.updateMember(Id, member);
+            return Result.success(updatedMember);
+        } catch (RuntimeException e) {
+            return Result.error(CodeMsg.SERVER_ERROR);
         }
     }
     @PostMapping("/login")
