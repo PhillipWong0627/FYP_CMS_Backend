@@ -1,7 +1,14 @@
 package com.example.demo.Bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.List;
+
+@Getter
+@Setter
 @Entity
 @Table
 public class Member {
@@ -22,6 +29,12 @@ public class Member {
     private boolean isDeleted;
     private int points = 0;
 
+
+    // Many-to-Many relationship with Event
+    @ManyToMany(mappedBy = "members")
+    @JsonIgnore
+    private List<Event> events;
+
     public Member() {
     }
 
@@ -36,14 +49,16 @@ public class Member {
         this.isDeleted = isDeleted;
     }
 
-    public Member(String memberName, String password, String email, String address, String contact, String description, boolean isDeleted) {
+    public Member(String memberName, String password, String email, String address, String contact, String description, boolean isDeleted, int points, List<Event> events) {
         this.memberName = memberName;
         this.password = password;
         this.email = email;
         this.address = address;
         this.contact = contact;
         this.description = description;
-        this.isDeleted = false;
+        this.isDeleted = isDeleted;
+        this.points = points;
+        this.events = events;
     }
 
     @Override

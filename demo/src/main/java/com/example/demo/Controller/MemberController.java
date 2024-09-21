@@ -78,6 +78,21 @@ public class MemberController {
             return Result.error(CodeMsg.SERVER_ERROR);
         }
     }
+
+    @DeleteMapping("deleteById/{id}")
+    public Result<Boolean> deleteMemberById(@PathVariable() Long id){
+        try {
+            Result<Boolean> isDeleted = memberService.deleteMember(id); // Call the service to delete
+            if (isDeleted.getData()) {
+                return Result.success(true); // Return success if the deletion was successful
+            } else {
+                return Result.error(CodeMsg.SERVER_ERROR); // Return error if the member doesn't exist
+            }
+        } catch (Exception e) {
+            return Result.error(CodeMsg.SERVER_ERROR.fillArgs("Failed to delete member"));
+        }
+
+    }
     @PostMapping("/login")
     public ResponseEntity<Result<Map<String, Object>>> login(@RequestBody Member loginRequest) {
         // Call the login method from the service layer
