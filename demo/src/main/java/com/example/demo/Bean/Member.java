@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -35,6 +36,16 @@ public class Member {
     @ManyToMany(mappedBy = "members")
     @JsonIgnore
     private List<Event> events;
+    // Many-to-Many relationship with Reward
+    @ManyToMany
+    @JoinTable(
+            name = "member_rewards", // Join table name
+            joinColumns = @JoinColumn(name = "member_id"), // Foreign key for Member
+            inverseJoinColumns = @JoinColumn(name = "reward_id") // Foreign key for Reward
+    )
+    private List<Reward> redeemedRewards = new ArrayList<>();
+
+
 
     public Member() {
     }
@@ -50,7 +61,7 @@ public class Member {
         this.isDeleted = isDeleted;
     }
 
-    public Member(String memberName, String password, String email, String address, String contact, String description, boolean isDeleted, int points, List<Event> events,String avatar) {
+    public Member(String memberName, String password, String email, String address, String contact, String description, boolean isDeleted, int points, List<Event> events,String avatar, List<Reward> rewards) {
         this.memberName = memberName;
         this.password = password;
         this.email = email;
@@ -61,7 +72,7 @@ public class Member {
         this.points = points;
         this.events = events;
         this.avatar = avatar;
-
+        this.redeemedRewards = rewards;
     }
 
     @Override

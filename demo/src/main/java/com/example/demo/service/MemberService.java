@@ -2,7 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.Bean.Event;
 import com.example.demo.Bean.Member;
+import com.example.demo.Bean.Reward;
 import com.example.demo.repo.MemberRepository;
+import com.example.demo.repo.RewardRepository;
 import com.example.demo.result.CodeMsg;
 import com.example.demo.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,25 +18,17 @@ import java.util.Optional;
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
-
+    private final RewardRepository rewardRepository;
     @Autowired
-    public MemberService(MemberRepository memberRepository) {
+    public MemberService(MemberRepository memberRepository, RewardRepository rewardRepository) {
         this.memberRepository = memberRepository;
+        this.rewardRepository = rewardRepository;
     }
 
     public List<Member> getMember(){
         return memberRepository.findAll();
     }
 
-//    public void addNewMember(Member member) {
-//        Optional<Member> memberOptional =  memberRepository
-//                .findByName(member.getMemberName());
-//
-//        if(memberOptional.isPresent()){
-//            throw new IllegalStateException("Name Taken");
-//        }
-//        memberRepository.save(member);
-//    }
     public Result<Boolean> addNewMember(Member member) {
 
         Optional<Member> memberOptional1 = memberRepository.findByEmail(member.getEmail());
@@ -148,6 +142,59 @@ public class MemberService {
             return Result.error(CodeMsg.EMAIL_NOT_EXIST);
         }
     }
+
+    public Result<List<Reward>> getRedeemedRewards(Long memberId) {
+        Optional<Member> memberOpt = memberRepository.findById(memberId);
+
+        if (memberOpt.isEmpty()) {
+            return Result.error(CodeMsg.MEMBER_NOT_EXIST);
+        }
+
+        Member member = memberOpt.get();
+        List<Reward> redeemedRewards = member.getRedeemedRewards();
+
+        return Result.success(redeemedRewards);
+    }
+
+    public Result<Boolean> redeemReward(Long memberId, Long rewardId) {
+        // Find the member by ID
+        Optional<Member> memberOpt = memberRepository.findById(memberId);
+        if (memberOpt.isEmpty()) {
+            return Result.error(CodeMsg.MEMBER_NOT_EXIST);
+        }
+
+        Member member = memberOpt.get();
+
+        // Find the reward by ID
+        Optional<Reward> rewardOpt = rewardRepository.findById(rewardId);
+        if (rewardOpt.isEmpty()) {
+            return Result.error(CodeMsg.REWARD_NOT_EXIST);
+        }
+
+        Reward reward = rewardOpt.get();
+        // Check if the member has already redeemed the reward
+        if (member.getRedeemedRewards().contains(reward)) {
+            return Result.error(CodeMsg.ALREADY_REDEEMED);
+        }
+
+        // Check if the member has enough points
+        if (member.getPoints() < reward.getPoints()) {
+            return Result.error(CodeMsg.NOT_ENOUGH_POINTS);
+        }
+
+        // Deduct the points from the member
+        member.setPoints(member.getPoints() - reward.getPoints());
+
+        // Add the reward to the member's redeemed rewards
+        member.getRedeemedRewards().add(reward);
+
+        // Save the member with updated points and redeemed rewards
+        memberRepository.save(member);
+
+        return Result.success(true);
+    }
+
+
 
 
 

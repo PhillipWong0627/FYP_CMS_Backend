@@ -22,6 +22,14 @@ public class CodeMsg {
 
     //User Join Event
     public static CodeMsg EVENT_JOIN = new CodeMsg(500216,"User has already join this event");
+    //User Redeem Reward
+    public static CodeMsg REWARD_NOT_EXIST = new CodeMsg(500217,"Reward Not Exist");
+    public static CodeMsg MEMBER_NOT_EXIST = new CodeMsg(500218,"Member Not Exist");
+    public static CodeMsg NOT_ENOUGH_POINTS = new CodeMsg(500218,"Points Not Enough");
+    public static CodeMsg OUT_OF_STOCK = new CodeMsg(500218,"Product out of stock");
+    public static CodeMsg ALREADY_REDEEMED = new CodeMsg(500219, "You have already redeemed this reward.");
+
+
     //Facility
     public static CodeMsg FACILITY_NOT_EXIST = new CodeMsg(500215,"Facility Not Existed");
 

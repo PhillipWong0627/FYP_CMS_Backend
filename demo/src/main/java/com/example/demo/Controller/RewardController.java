@@ -5,6 +5,7 @@ import com.example.demo.result.CodeMsg;
 import com.example.demo.result.Result;
 import com.example.demo.service.RewardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -84,6 +85,18 @@ public class RewardController {
             return Result.error(CodeMsg.SERVER_ERROR.fillArgs("Failed to delete reward"));
         }
     }
+    // Endpoint for redeeming a product
+    @PostMapping("/reward/redeem/{rewardId}/member/{memberId}")
+    public ResponseEntity<Result<String>> redeemProduct(@PathVariable Long rewardId, @PathVariable Long memberId) {
+        Result<String> result = rewardService.redeemProduct(rewardId, memberId);
+        if (result.getCode() == 0) {
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.status(400).body(result);
+        }
+    }
+
+
 
 
 

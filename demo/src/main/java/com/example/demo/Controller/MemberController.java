@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.Bean.Event;
 import com.example.demo.Bean.Member;
+import com.example.demo.Bean.Reward;
 import com.example.demo.result.CodeMsg;
 import com.example.demo.result.Result;
 import com.example.demo.service.MemberService;
@@ -152,6 +153,39 @@ public class MemberController {
             return Result.error(CodeMsg.SERVER_ERROR);
         }
     }
+
+    // Endpoint to get the redeemed rewards for a specific member
+    @GetMapping("/{memberId}/redeemed-rewards")
+    public ResponseEntity<Result<List<Reward>>> getRedeemedRewards(@PathVariable Long memberId) {
+        Result<List<Reward>> result = memberService.getRedeemedRewards(memberId);
+        if (result.getCode() == 0) {
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.status(400).body(result);
+        }
+    }
+    @PostMapping("/{memberId}/redeem")
+    public ResponseEntity<Result<Boolean>> redeemReward(
+            @PathVariable Long memberId,
+            @RequestBody Map<String, Long> request // Expecting { "rewardId": 1 }
+    ) {
+        Long rewardId = request.get("rewardId");
+        Result<Boolean> result = memberService.redeemReward(memberId, rewardId);
+
+        if (result.getCode() == 0) {
+            return ResponseEntity.ok(result); // 200 OK
+        } else if (result.getCode() == CodeMsg.ALREADY_REDEEMED.getCode()) {
+            // Instead of 409 Conflict, return 200 OK with different code/message
+            return ResponseEntity.ok(Result.error(CodeMsg.ALREADY_REDEEMED)); // 200 OK but with "already redeemed" message
+        } else if (result.getCode() == CodeMsg.NOT_ENOUGH_POINTS.getCode()) {
+            return ResponseEntity.ok(Result.error(CodeMsg.NOT_ENOUGH_POINTS)); // 200 OK but with "insufficient points" message
+        } else {
+            return ResponseEntity.ok(Result.error(CodeMsg.SERVER_ERROR)); // General error, return 200 OK
+        }
+
+    }
+
+
 
 
 
