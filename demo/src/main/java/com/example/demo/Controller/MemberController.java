@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Bean.Event;
 import com.example.demo.Bean.Member;
 import com.example.demo.result.CodeMsg;
 import com.example.demo.result.Result;
@@ -106,6 +107,17 @@ public class MemberController {
             return ResponseEntity.status(400).body(result);
         }
     }
+    // Get events joined by a specific member
+    @GetMapping("/{memberId}/joined-events")
+    public ResponseEntity<Result<List<Event>>> getJoinedEvents(@PathVariable Long memberId) {
+        try {
+            List<Event> events = memberService.getJoinedEvents(memberId);
+            return ResponseEntity.ok(Result.success(events));
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(Result.error(CodeMsg.SERVER_ERROR.fillArgs("Error retrieving joined events")));
+        }
+    }
+
 
     // Endpoint to get member points
     @GetMapping("/{memberId}/points")
@@ -129,6 +141,18 @@ public class MemberController {
             return ResponseEntity.status(400).body(result);
         }
     }
+    // New endpoint to update the avatar
+    @PutMapping("/{memberId}/update-avatar")
+    public Result<Member> updateAvatar(@PathVariable Long memberId, @RequestBody Map<String, String> request) {
+        String avatarUrl = request.get("avatarUrl");
+        Result<Member> result = memberService.updateAvatar(memberId, avatarUrl);
+        if (result.getCode() == CodeMsg.SUCCESS.getCode()) {
+            return Result.success(result.getData());
+        } else {
+            return Result.error(CodeMsg.SERVER_ERROR);
+        }
+    }
+
 
 
 

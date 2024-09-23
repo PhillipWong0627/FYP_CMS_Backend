@@ -26,6 +26,7 @@ public class Member {
     private String address;
     private String contact;
     private String description;
+    private String avatar = "https://res.cloudinary.com/dnzypglvm/image/upload/v1727100429/ixzmrge9c9s45c4okzrf.jpg";
     private boolean isDeleted;
     private int points = 0;
 
@@ -49,7 +50,7 @@ public class Member {
         this.isDeleted = isDeleted;
     }
 
-    public Member(String memberName, String password, String email, String address, String contact, String description, boolean isDeleted, int points, List<Event> events) {
+    public Member(String memberName, String password, String email, String address, String contact, String description, boolean isDeleted, int points, List<Event> events,String avatar) {
         this.memberName = memberName;
         this.password = password;
         this.email = email;
@@ -59,6 +60,8 @@ public class Member {
         this.isDeleted = isDeleted;
         this.points = points;
         this.events = events;
+        this.avatar = avatar;
+
     }
 
     @Override

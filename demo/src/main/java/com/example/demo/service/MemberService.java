@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.Bean.Event;
 import com.example.demo.Bean.Member;
 import com.example.demo.repo.MemberRepository;
 import com.example.demo.result.CodeMsg;
@@ -126,6 +127,30 @@ public class MemberService {
         }
         return Result.error(CodeMsg.SERVER_ERROR);
     }
+
+        // Get events joined by a member
+    public List<Event> getJoinedEvents(Long memberId) {
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
+        if (memberOptional.isPresent()) {
+            return memberOptional.get().getEvents();
+        } else {
+            throw new RuntimeException("Member not found");
+        }
+    }
+    public Result<Member> updateAvatar(Long memberId, String avatarUrl) {
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            member.setAvatar(avatarUrl); // Update avatar URL
+            memberRepository.save(member); // Save updated member to the database
+            return Result.success(member);
+        } else {
+            return Result.error(CodeMsg.EMAIL_NOT_EXIST);
+        }
+    }
+
+
+
 }
 
 
