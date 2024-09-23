@@ -65,9 +65,18 @@ public class FacilityController {
 
     // Delete a facility
     @DeleteMapping("deleteById/{id}")
-    public ResponseEntity<Void> deleteFacility(@PathVariable Long id) {
-        facilityService.deleteFacility(id);
-        return ResponseEntity.noContent().build();
+    public Result<Boolean> deleteFacility(@PathVariable Long id) {
+        try{
+            Result<Boolean> isDeleted = facilityService.deleteFacility(id);
+            if(isDeleted.getData()){
+                return Result.success(true);
+            }else{
+                return Result.error(CodeMsg.FACILITY_NOT_EXIST);
+            }
+        } catch (Exception e){
+            return Result.error(CodeMsg.SERVER_ERROR.fillArgs("Failed to delete member"));
+        }
+
     }
 
 

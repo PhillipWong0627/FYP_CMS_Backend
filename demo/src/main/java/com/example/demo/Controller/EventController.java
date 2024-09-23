@@ -74,7 +74,7 @@ public class EventController {
             return Result.success(event);
         } catch (RuntimeException e) {
             System.out.println("FAIL");
-            return Result.error(CodeMsg.SERVER_ERROR);
+            return Result.error(CodeMsg.EVENT_JOIN);
         }
     }
 

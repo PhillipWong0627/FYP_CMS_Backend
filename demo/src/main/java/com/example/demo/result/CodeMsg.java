@@ -20,6 +20,8 @@ public class CodeMsg {
 
     public static CodeMsg EMAIL_EXIST = new CodeMsg(500215,"Email has already existed, please try another username");
 
+    //User Join Event
+    public static CodeMsg EVENT_JOIN = new CodeMsg(500216,"User has already join this event");
     //Facility
     public static CodeMsg FACILITY_NOT_EXIST = new CodeMsg(500215,"Facility Not Existed");
 

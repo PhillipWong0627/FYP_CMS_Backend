@@ -71,7 +71,7 @@ public class EventService {
             System.out.println("GOTCHA");
             Event event = eventOpt.get();
             Member member = memberOpt.get();
-
+            member.setPoints((int) (member.getPoints() + event.getEventFee()));
             System.out.println(event);
             // Add the member to the event's member list
             event.getMembers().add(member);

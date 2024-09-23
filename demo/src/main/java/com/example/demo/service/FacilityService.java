@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.Bean.Facility;
 import com.example.demo.repo.FacilityRepository;
+import com.example.demo.result.CodeMsg;
+import com.example.demo.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,10 +46,14 @@ public class FacilityService {
             return facilityRepository.save(facility);
         }).orElseThrow(() -> new RuntimeException("Facility not found with id " + id));
     }
-    public void deleteFacility(Long id) {
-        facilityRepository.deleteById(id);
+    public Result<Boolean> deleteFacility(Long id) {
+        Optional<Facility> facilityOptional = facilityRepository.findById(id);
+        if(facilityOptional.isPresent()) {
+            facilityRepository.deleteById(id);
+            return Result.success(true);
+        }
+        return Result.error(CodeMsg.SERVER_ERROR);
     }
-
 }
 
 
