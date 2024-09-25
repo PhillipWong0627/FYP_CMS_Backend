@@ -33,6 +33,13 @@ public class CodeMsg {
     public static CodeMsg ADMIN_PASSWORD_ERROR = new CodeMsg(500220,"Admin password error");
     public static CodeMsg ADMIN_NOT_EXIST = new CodeMsg(500221,"Admin Not Exist");
 
+    //Booking
+    public static CodeMsg COURT_NOT_AVAILABLE = new CodeMsg(500222,"Court Not Available");
+    public static CodeMsg BOOKING_FAILED = new CodeMsg(500223,"Failed To Book");
+    public static CodeMsg BOOKING_NOT_FOUND = new CodeMsg(500223,"Booking Not Found");
+    public static CodeMsg COURT_UNAVAILABLE = new CodeMsg(500224,"Court Not Available");
+    public static CodeMsg BOOKING_NOT_AVAILABLE = new CodeMsg(500225,"BOOKING_NOT_AVAILABLE");
+
 
     //Facility
     public static CodeMsg FACILITY_NOT_EXIST = new CodeMsg(500215,"Facility Not Existed");

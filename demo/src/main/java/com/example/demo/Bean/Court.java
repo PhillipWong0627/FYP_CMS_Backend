@@ -12,7 +12,7 @@ import lombok.Setter;
 public class Court {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long courtId;
     private String courtNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)

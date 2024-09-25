@@ -5,6 +5,7 @@ import com.example.demo.Bean.Court;
 import com.example.demo.Bean.Facility;
 import com.example.demo.result.CodeMsg;
 import com.example.demo.result.Result;
+import com.example.demo.service.CourtService;
 import com.example.demo.service.FacilityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +19,12 @@ import java.util.Optional;
 public class FacilityController {
 
     private final FacilityService facilityService;
+    private final CourtService courtService;
 
     @Autowired
-    public FacilityController(FacilityService facilityService) {
+    public FacilityController(FacilityService facilityService, CourtService courtService) {
         this.facilityService = facilityService;
+        this.courtService = courtService;
     }
 
     @PostMapping("/addFacilities")
@@ -78,6 +81,13 @@ public class FacilityController {
         }
 
     }
+
+    @GetMapping("/facilities/{facilityId}/courts")
+    public Result<List<Court>> getCourtsByFacility(@PathVariable Long facilityId) {
+        List<Court> courts = courtService.getCourtsByFacility(facilityId);
+        return Result.success(courts);
+    }
+
 
 
 }
