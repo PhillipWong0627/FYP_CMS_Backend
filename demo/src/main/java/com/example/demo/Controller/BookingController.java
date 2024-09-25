@@ -1,8 +1,10 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Bean.Booking;
+import com.example.demo.Bean.Member;
 import com.example.demo.DTO.BookCourtRequest;
 import com.example.demo.DTO.CheckAvailabilityRequest;
+import com.example.demo.result.CodeMsg;
 import com.example.demo.result.Result;
 import com.example.demo.service.BookingService;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +25,24 @@ public class BookingController {
     }
 
     @PostMapping("/check")
-    public boolean checkAvailability(@RequestBody CheckAvailabilityRequest request) {
-        return bookingService.checkAvailability(request.getCourtId(), request.getDate(), request.getTimeSlot());
+    public Result<Boolean> checkAvailability(@RequestBody CheckAvailabilityRequest request) {
+        boolean isAvailable = bookingService.checkAvailability(request.getCourtId(), request.getDate(), request.getTimeSlot());
+        if(isAvailable){
+            return Result.success(true);
+        }else{
+            return Result.error(CodeMsg.SERVER_ERROR);
+        }
     }
 
     // Book court using @RequestBody
     @PostMapping("/create")
-    public Booking bookCourt(@RequestBody BookCourtRequest request) {
-        return bookingService.bookCourt(request.getCourtId(), request.getMemberId(), request.getDate(), request.getTimeSlot());
+    public Result<Booking> bookCourt(@RequestBody BookCourtRequest request) {
+        try{
+            Booking updatedMember = bookingService.bookCourt(request.getCourtId(), request.getMemberId(), request.getDate(), request.getTimeSlot());
+            return Result.success(updatedMember);
+        } catch (RuntimeException e) {
+            return Result.error(CodeMsg.SERVER_ERROR);
+        }
     }
 
 
