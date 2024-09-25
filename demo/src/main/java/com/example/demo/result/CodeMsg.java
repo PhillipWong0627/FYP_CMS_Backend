@@ -29,6 +29,10 @@ public class CodeMsg {
     public static CodeMsg OUT_OF_STOCK = new CodeMsg(500218,"Product out of stock");
     public static CodeMsg ALREADY_REDEEMED = new CodeMsg(500219, "You have already redeemed this reward.");
 
+    //Admin
+    public static CodeMsg ADMIN_PASSWORD_ERROR = new CodeMsg(500220,"Admin password error");
+    public static CodeMsg ADMIN_NOT_EXIST = new CodeMsg(500221,"Admin Not Exist");
+
 
     //Facility
     public static CodeMsg FACILITY_NOT_EXIST = new CodeMsg(500215,"Facility Not Existed");
