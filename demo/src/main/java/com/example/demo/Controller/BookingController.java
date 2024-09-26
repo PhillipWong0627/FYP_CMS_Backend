@@ -54,6 +54,16 @@ public class BookingController {
             return Result.error(CodeMsg.ALREADY_REDEEMED);
         }
     }
+    @GetMapping("/getListByMemberId")
+    public Result<List<Booking>> getBookingsByMemberId(@RequestParam Long memberId) {
+        try{
+            List<Booking> bookings = bookingService.getBookingByMemberId(memberId);
+            return Result.success(bookings);
+
+        } catch (Exception e) {
+            return Result.error(CodeMsg.ALREADY_REDEEMED);
+        }
+    }
 
     @PostMapping("/check")
     public Result<Boolean> checkAvailability(@RequestBody CheckAvailabilityRequest request) {

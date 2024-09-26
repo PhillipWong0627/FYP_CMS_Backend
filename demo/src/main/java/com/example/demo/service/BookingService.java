@@ -49,6 +49,9 @@ public class BookingService {
         return bookingRepository.findByFacilityId(id);
     }
 
+    public List<Booking> getBookingByMemberId(Long memberId){
+        return bookingRepository.findByMemberId(memberId);
+    }
     //GG
     // Get all bookings for a facility on a specific date
     public List<Booking> getBookingsByFacilityAndDate(Long facilityId, LocalDate date) {
