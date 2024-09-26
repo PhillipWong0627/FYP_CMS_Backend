@@ -25,7 +25,7 @@ public class BookingService {
         List<Booking> bookings = bookingRepository.findByCourt_CourtIdAndDate(courtId, date);
         return bookings.stream().noneMatch(b -> b.getTimeSlot().equals(timeSlot));
     }
-    public Booking bookCourt(Long courtId, Long memberId, LocalDate date, String timeSlot) {
+    public Booking bookCourt(Long courtId, Long memberId, LocalDate date, String timeSlot, Long facilityId) {
         Court court = courtRepository.findById(courtId).orElseThrow(() -> new RuntimeException("Court not found"));
         if (checkAvailability(courtId, date, timeSlot)) {
             Booking booking = new Booking();
@@ -33,12 +33,27 @@ public class BookingService {
             booking.setMemberId(memberId);
             booking.setDate(date);
             booking.setTimeSlot(timeSlot);
+            booking.setFacilityId(facilityId);
             return bookingRepository.save(booking);
         } else {
             throw new RuntimeException("Slot is already booked");
         }
     }
 
+    //HI
+    public List<Booking> getBookingList(){
+        return bookingRepository.findAll();
+    }
+
+    public List<Booking> getBookingListByFaId(Long id){
+        return bookingRepository.findByFacilityId(id);
+    }
+
+    //GG
+    // Get all bookings for a facility on a specific date
+    public List<Booking> getBookingsByFacilityAndDate(Long facilityId, LocalDate date) {
+        return bookingRepository.findByFacilityIdAndDate(facilityId, date);
+    }
 
 
 

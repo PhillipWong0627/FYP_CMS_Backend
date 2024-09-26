@@ -25,13 +25,15 @@ public class Booking {
 
     private Long memberId;  // ID of the user who booked the court
 
+    private Long facilityId;
     public Booking() {
     }
 
-    public Booking(Long memberId, Court court, String timeSlot, LocalDate date) {
+    public Booking(Long memberId, Court court, String timeSlot, LocalDate date, Long facilityId) {
         this.memberId = memberId;
         this.court = court;
         this.timeSlot = timeSlot;
         this.date = date;
+        this.facilityId = facilityId;
     }
 }

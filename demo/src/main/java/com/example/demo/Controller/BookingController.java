@@ -23,6 +23,37 @@ public class BookingController {
     public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
     }
+    //Get All Booking List
+    @GetMapping("/getBooking-List")
+    public Result<List<Booking>> getBookingList(){
+        try{
+            List<Booking> bookings = bookingService.getBookingList();
+            return Result.success(bookings);
+        } catch (Exception e) {
+            return Result.error(CodeMsg.SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/getBooking-ListByFacId")
+    public Result<List<Booking>> getBookingListByFacId(@RequestParam("facId") Long facId){
+        try{
+            List<Booking> bookings = bookingService.getBookingListByFaId(facId);
+            return Result.success(bookings);
+
+        }catch (Exception e) {
+            return Result.error(CodeMsg.SERVER_ERROR);
+        }
+    }
+    @GetMapping("/getListByFacilityId_Date")
+    public Result<List<Booking>> getBookings(@RequestParam Long facilityId, @RequestParam LocalDate date) {
+        try{
+            List<Booking> bookings = bookingService.getBookingsByFacilityAndDate(facilityId, date);
+            return Result.success(bookings);
+
+        } catch (Exception e) {
+            return Result.error(CodeMsg.ALREADY_REDEEMED);
+        }
+    }
 
     @PostMapping("/check")
     public Result<Boolean> checkAvailability(@RequestBody CheckAvailabilityRequest request) {
@@ -30,7 +61,7 @@ public class BookingController {
         if(isAvailable){
             return Result.success(true);
         }else{
-            return Result.error(CodeMsg.SERVER_ERROR);
+            return Result.success(false);
         }
     }
 
@@ -38,7 +69,8 @@ public class BookingController {
     @PostMapping("/create")
     public Result<Booking> bookCourt(@RequestBody BookCourtRequest request) {
         try{
-            Booking updatedMember = bookingService.bookCourt(request.getCourtId(), request.getMemberId(), request.getDate(), request.getTimeSlot());
+            Booking updatedMember = bookingService.bookCourt(request.getCourtId(), request.getMemberId(), request.getDate(), request.getTimeSlot(), request.getFacilityID());
+//            System.out.println(updatedMember);
             return Result.success(updatedMember);
         } catch (RuntimeException e) {
             return Result.error(CodeMsg.SERVER_ERROR);

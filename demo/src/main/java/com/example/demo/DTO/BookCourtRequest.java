@@ -12,6 +12,7 @@ public class BookCourtRequest {
     private Long memberId;
     private LocalDate date;
     private String timeSlot;
+    private Long facilityID;
 
 }
 
