@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookingService {
@@ -56,6 +57,11 @@ public class BookingService {
     // Get all bookings for a facility on a specific date
     public List<Booking> getBookingsByFacilityAndDate(Long facilityId, LocalDate date) {
         return bookingRepository.findByFacilityIdAndDate(facilityId, date);
+    }
+
+    public Optional<Booking> getBookingByBookingId(Long bookingId)
+    {
+        return bookingRepository.findById(bookingId);
     }
 
 

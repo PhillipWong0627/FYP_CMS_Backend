@@ -10,9 +10,11 @@ import com.example.demo.service.BookingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Book;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v1/member/bookings")
@@ -83,8 +85,17 @@ public class BookingController {
 //            System.out.println(updatedMember);
             return Result.success(updatedMember);
         } catch (RuntimeException e) {
-            return Result.error(CodeMsg.SERVER_ERROR);
+            return Result.error(CodeMsg.COURT_NOT_AVAILABLE);
         }
+    }
+
+    @GetMapping("/findBookingById/{id}")
+    public Result<Optional<Booking>> findBookingById(@PathVariable() Long id){
+        Optional<Booking> getBookingById = bookingService.getBookingByBookingId(id);
+        if(getBookingById.isPresent()){
+            return Result.success(getBookingById);
+        }
+        return Result.error(CodeMsg.SERVER_ERROR);
     }
 
 
