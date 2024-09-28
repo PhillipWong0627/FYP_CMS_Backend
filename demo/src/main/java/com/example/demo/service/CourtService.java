@@ -48,5 +48,9 @@ public class CourtService {
         }
         return false;
     }
+    // Delete a court by its ID
+    public void deleteCourtById(Long courtId) {
+        courtRepository.deleteById(courtId);
+    }
 
 }

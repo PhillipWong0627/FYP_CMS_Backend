@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.Bean.Court;
 import com.example.demo.Bean.Facility;
 import com.example.demo.repo.FacilityRepository;
 import com.example.demo.result.CodeMsg;
@@ -13,10 +14,12 @@ import java.util.Optional;
 @Service
 public class FacilityService {
     private final FacilityRepository facilityRepository;
+    private final CourtService courtService;
 
     @Autowired
-    public FacilityService(FacilityRepository facilityRepository) {
+    public FacilityService(FacilityRepository facilityRepository, CourtService courtService) {
         this.facilityRepository = facilityRepository;
+        this.courtService = courtService;
     }
 
     public Facility createFacility(Facility facility) {
@@ -43,6 +46,30 @@ public class FacilityService {
             facility.setClosingHour(updatedFacility.getClosingHour());
             facility.setFacilityType(updatedFacility.getFacilityType());
             facility.setStatus(updatedFacility.getStatus());
+
+            // Handle court updates based on totalCourt value
+            int currentCourtCount = facility.getCourts().size();
+            int newTotalCourt = updatedFacility.getTotalCourt();
+
+            if (newTotalCourt > currentCourtCount) {
+                // Add new courts if the new totalCourt is greater than the current number
+                for (int i = currentCourtCount + 1; i <= newTotalCourt; i++) {
+                    Court newCourt = new Court();
+                    newCourt.setCourtNumber("Court " + i);
+                    newCourt.setAvailable(true); // Set default availability
+                    newCourt.setFacility(facility); // Associate court with the facility
+                    facility.getCourts().add(newCourt);
+                }
+            } else if (newTotalCourt < currentCourtCount) {
+                // Remove courts if the new totalCourt is less than the current number
+                List<Court> courts = facility.getCourts();
+                for (int i = currentCourtCount; i > newTotalCourt; i--) {
+                    Court courtToRemove = courts.get(i - 1); // Get the last court
+                    courts.remove(courtToRemove); // Remove court from list
+                    courtService.deleteCourtById(courtToRemove.getCourtId()); // Optionally delete court from DB
+                }
+            }
+
             return facilityRepository.save(facility);
         }).orElseThrow(() -> new RuntimeException("Facility not found with id " + id));
     }

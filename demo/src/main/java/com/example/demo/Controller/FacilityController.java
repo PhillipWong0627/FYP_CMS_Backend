@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,11 +30,21 @@ public class FacilityController {
 
     @PostMapping("/addFacilities")
     public Result<Facility> createFacility(@RequestBody Facility facility) {
-        for (Court court : facility.getCourts()) {
-            court.setFacility(facility); // Set facility for each court
+        List<Court> courts = new ArrayList<>();
+        for (int i = 1; i <= facility.getTotalCourt(); i++) {
+            Court court = new Court();
+            court.setCourtNumber("Court " + i);  // Set court number as "Court 1", "Court 2", etc.
+            court.setAvailable(true);             // Set default available status (or modify as needed)
+            court.setFacility(facility);          // Associate court with the facility
+            courts.add(court);
         }
+        facility.setCourts(courts);  // Add courts to the facility
+
+//        for (Court court : facility.getCourts()) {
+//            court.setFacility(facility); // Set facility for each court
+//        }
         Facility savedFacility = facilityService.createFacility(facility); // Save facility and associated courts
-            return Result.success(facility);
+            return Result.success(savedFacility);
 //        return facilityService.createFacility(facility);
         //TEST
     }
