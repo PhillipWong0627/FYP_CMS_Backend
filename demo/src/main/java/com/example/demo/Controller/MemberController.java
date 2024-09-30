@@ -50,13 +50,24 @@ public class MemberController {
 //    public void registerNewMember(@RequestBody Member member){
 //        memberService.addNewMember(member);
 //    }
+
+        @GetMapping("/check-email")
+    public ResponseEntity<Result<Boolean>> checkEmailExists(@RequestParam String email) {
+        boolean emailExists = memberService.emailExists(email);
+        if (emailExists) {
+            return ResponseEntity.ok(Result.success(true)); // Email exists
+        } else {
+            return ResponseEntity.ok(Result.success(false)); // Email does not exist
+        }
+    }
+
     @PostMapping("/addMembers")
     public ResponseEntity<Result<Boolean>> registerNewMember(@RequestBody Member member){
         Result<Boolean> result = memberService.addNewMember(member);
         if (result.getCode() == CodeMsg.SUCCESS.getCode()) {
             return ResponseEntity.ok(result); // Return 200 OK for success
         } else {
-            return ResponseEntity.status(400).body(result); // Return 400 Bad Request for errors
+            return ResponseEntity.ok(result); // Return 400 Bad Request for errors
         }
     }
 
@@ -105,7 +116,7 @@ public class MemberController {
             return ResponseEntity.ok(result);
         } else {
             // If login fails, return the error result with HTTP 400 Bad Request status
-            return ResponseEntity.status(400).body(result);
+            return ResponseEntity.ok(result);
         }
     }
     // Get events joined by a specific member

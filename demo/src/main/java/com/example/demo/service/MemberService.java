@@ -155,6 +155,9 @@ public class MemberService {
 
         return Result.success(redeemedRewards);
     }
+    public boolean emailExists(String email) {
+        return memberRepository.findByEmail(email).isPresent();
+    }
 
     public Result<Boolean> redeemReward(Long memberId, Long rewardId) {
         // Find the member by ID
